@@ -1,0 +1,7 @@
+partition,class,label,count,percentage
+all,0,Sin asistencia,397807,0.4973768770082895
+all,1,Con asistencia,402003,0.5026231229917105
+train,0,Sin asistencia,278465,0.49737705562213885
+train,1,Con asistencia,281402,0.5026229443778611
+test,0,Sin asistencia,119342,0.497376460242641
+test,1,Con asistencia,120601,0.5026235397573591

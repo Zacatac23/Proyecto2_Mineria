@@ -177,13 +177,18 @@ def age_to_years(row: pd.Series) -> float:
 
 def encode_assistance(value: object) -> float:
     assisted_categories = {"MEDICA", "PARAMEDICA", "EMPIRICA", "COMADRONA"}
+    no_assistance_categories = {"NINGUNA"}
     normalized = normalize_text(value)
     if pd.isna(normalized):
         return np.nan
-    return 1.0 if str(normalized) in assisted_categories else 0.0
+    if str(normalized) in assisted_categories:
+        return 1.0
+    if str(normalized) in no_assistance_categories:
+        return 0.0
+    return np.nan
 
 
-def select_features(data: pd.DataFrame, max_null_ratio: float = 0.30) -> tuple[list[str], list[str]]:
+def select_features(data: pd.DataFrame, max_null_ratio: float = 0.60) -> tuple[list[str], list[str]]:
     categorical_candidates = [
         "sexo",
         "areag",
@@ -222,7 +227,7 @@ def build_preprocessor(numeric_features: list[str], categorical_features: list[s
     )
     categorical_pipeline = Pipeline(
         steps=[
-            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("imputer", SimpleImputer(strategy="constant", fill_value="DESCONOCIDO")),
             ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=True)),
         ]
     )
@@ -602,7 +607,8 @@ def main() -> None:
         raise RuntimeError("La variable respuesta debe tener exactamente dos clases para este flujo.")
 
     for column in categorical_features:
-        model_data[column] = model_data[column].astype("string")
+        model_data[column] = model_data[column].astype(object)
+        model_data[column] = model_data[column].where(model_data[column].notna(), np.nan)
 
     X = model_data[features]
     y = model_data[TARGET]
