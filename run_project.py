@@ -47,7 +47,7 @@ from sklearn.tree import DecisionTreeClassifier
 RANDOM_STATE = 42
 TEST_SIZE = 0.30
 TARGET = "asis_med_bin"
-DEFAULT_DATA = "datos_limpios_proyecto1.csv"
+DEFAULT_DATA = "data/processed/datos_limpios_proyecto1.csv"
 
 OUTPUT_DIR = Path("outputs")
 FIGURES_DIR = OUTPUT_DIR / "figures"
@@ -106,7 +106,7 @@ def resolve_input_files(data_path: Path, data_dir: Path | None) -> list[Path]:
 
     message = (
         "No se encontro el dataset. Coloque el archivo "
-        f"`{DEFAULT_DATA}` en la raiz del repositorio o ejecute con "
+        f"`{DEFAULT_DATA}` en el repositorio o ejecute con "
         "`--data ruta/al/archivo.csv`. Tambien puede usar `--data-dir data/raw` "
         "si cuenta con varios CSV/XLSX originales para concatenar."
     )
@@ -547,6 +547,7 @@ def write_run_summary(
         f"- Archivos de entrada: {', '.join(str(path) for path in input_files)}",
         f"- Registros despues de limpieza: {total_rows:,}",
         f"- Registros usados para modelado: {model_rows:,}",
+        f"- Registros excluidos por variable respuesta desconocida: {total_rows - model_rows:,}",
         f"- Variable respuesta: `{TARGET}`",
         f"- Division train/test: {int((1 - TEST_SIZE) * 100)}/{int(TEST_SIZE * 100)} con estratificacion",
         f"- Variables numericas: {', '.join(numeric_features) if numeric_features else 'ninguna'}",

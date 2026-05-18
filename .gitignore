@@ -1,4 +1,18 @@
+# Datos locales pesados
 datos_limpios_proyecto1.csv
+data/**/*.csv
+data/**/*.xlsx
+data/**/*.xls
+data/**/*.parquet
+outputs/datos_limpios_proyecto1.csv
+
+# Artefactos generados por ejecuciones
+outputs/results/*
+!outputs/results/.gitkeep
+outputs/figures/*
+!outputs/figures/.gitkeep
+
+# Entornos y caches locales
 __pycache__/
 .ipynb_checkpoints/
 .venv/
